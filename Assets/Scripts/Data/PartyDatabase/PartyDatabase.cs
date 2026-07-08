@@ -3,12 +3,12 @@ using Data.CharacterData;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Data.PartyDatabase
+namespace Data.UnitDatabase
 {
-    [CreateAssetMenu(fileName = "PartyDatabase", menuName = "Scriptable Objects/PartyDatabase")]
-    public class PartyDatabaseSO : SerializedScriptableObject
+    [CreateAssetMenu(fileName = "UnitDatabase", menuName = "Scriptable Objects/UnitDatabase")]
+    public class UnitDatabaseSO : SerializedScriptableObject
     {
-        public Dictionary<CharacterDataSo, List<CharacterDataSo>> Database = new();
+        public List<CharacterDataSo> Database = new();
     
     }
 }

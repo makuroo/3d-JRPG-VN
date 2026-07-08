@@ -27,18 +27,21 @@ namespace Battle
             _stat.OnStatChange?.Invoke();
            
             //Show damage popup
-            var popup =VfxManager.Instance.SpawnFromPool("DamagePopup", transform.position, 1f);
-            popup.GetComponent<DamagePopup>().Initialize(damage.ToString());
-            _view.PlayDamagedAudio();
+            // var popup =VfxManager.Instance.SpawnFromPool("DamagePopup", transform.position, 1f);
+            // popup.GetComponent<DamagePopup>().Initialize(damage.ToString());
+            // _view.PlayDamagedAudio();
             
             //unit alpha fade
-            sprite.DOFade(.5f, 0.2f).OnComplete(() =>
-            {
-                sprite.DOFade(1, .2f);
-            });
+            // sprite.DOFade(.5f, 0.2f).OnComplete(() =>
+            // {
+            //     sprite.DOFade(1, .2f);
+            // });
             
             //punch backward
-            transform.DOPunchPosition(-transform.right,.3f,1);
+            //transform.DOPunchPosition(-transform.right,.3f,1);
+            
+            _view.PlayAnimation("Hit");
+            
             if (_stat.Stat.CurrentHealth <= 0)
             {
                 _view.PlayAnimation("Dead");

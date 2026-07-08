@@ -31,13 +31,17 @@ namespace Battle
         {
             var view = Source.BattleCharacterView;
             var originalPos = view.transform.position;
-            var facingDirection = view.Owner.Team == Team.Player? Vector3.right : Vector3.left;
+            
+            var direction = originalPos - Target.BattleCharacterView.transform.position;
+            direction.y = 0;
+            direction.Normalize();
+            
             var moveForwardTween =
                 Source.BattleCharacterView.transform.DOMove(
-                    view.transform.position + facingDirection * 3f, 0.2f);
+                    Target.BattleCharacterView.transform.position + (direction * 3f), 0.2f);
         
             yield return moveForwardTween.WaitForCompletion();
-            view.PlayAnimation("Attack");
+            view.PlayAnimation("BasicAttack");
             //make sure we enter attack state
             yield return null;
         

@@ -21,7 +21,7 @@ namespace UI.Battle
             _actionButton.onClick.AddListener(()=>
             {
                 onClick.Invoke(actionData);
-                AudioManager.Instance.PlaySfx("ButtonClick",transform.position);
+                //AudioManager.Instance.PlaySfx("ButtonClick",transform.position);
                 _isSelected = true;
             });
         }

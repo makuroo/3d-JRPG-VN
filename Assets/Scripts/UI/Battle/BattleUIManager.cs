@@ -54,6 +54,7 @@ namespace UI.Battle
             {
                 Debug.LogWarning("Selected unit is null!");
                 return;
+			
             }
 
             if (selectedUnit.Team == Team.Player)

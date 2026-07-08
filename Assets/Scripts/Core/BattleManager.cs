@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Battle;
 using Character;
 using Character.Enemy;
@@ -17,8 +18,7 @@ namespace Core
     public enum BattleState
     {
         BattleStart,
-        PlayerTurn,
-        EnemyTurn,
+        ActionPhase,
         BattleWon,
         BattleLost
     }
@@ -27,21 +27,32 @@ namespace Core
     {
         public static BattleManager Instance;
         public Action<BattleState> OnStateChange;
-        public Action<CharacterDataSo, CharacterDataSo> OnPrepareBattle;
+        public Action<CharacterDataSo> OnPrepareBattle;
         public Action<List<BattleCharacterData>> OnPartyInitialized;
         [ShowInInspector,ReadOnly]
         private BattleState _currentState = BattleState.BattleStart;
+
+        private CharacterDataSo _pickedUnit;
+        
         public BattleState CurrentState => _currentState;
         public BattleCharacterData ActiveUnit { get; set; }
 
         public BattleActionSO SelectedBattleAction => _selectedBattleAction;
-    
+
+        public CharacterDataSo PickedUnit
+        {
+            get => _pickedUnit;
+            set => _pickedUnit = value;
+        }
+
         private List<BattleCharacterData> _playerPartyData = new();
         private List<BattleCharacterData> _enemyPartyData = new();
     
         private BattleActionSO _selectedBattleAction;
         private int _currentPlayerIndex;
         private int _currentEnemyIndex;
+        
+        private List<BattleCharacterData> _sortedTurnOrder = new();
 
         private void Awake()
         {
@@ -56,21 +67,21 @@ namespace Core
             DontDestroyOnLoad(gameObject);
         }
 
-        public void SetBattle(CharacterDataSo playerData, CharacterDataSo enemyData)
+        public void SetBattle(CharacterDataSo playerData)
         {
             ScreenFader.Instance.FadeIn(.5f, () =>
             {
-                StartCoroutine(TransitionCoroutine(playerData, enemyData));
+                StartCoroutine(TransitionCoroutine(playerData));
             });
         }
     
-        private IEnumerator TransitionCoroutine(CharacterDataSo playerData, CharacterDataSo enemyData)
+        private IEnumerator TransitionCoroutine(CharacterDataSo playerData)
         {
-            var handler = SceneManager.LoadSceneAsync("BattleScene");
+            var handler = SceneManager.LoadSceneAsync("Battle");
             yield return handler;
             GameManager.Instance.UpdateState(GameState.Battle);
-            AudioManager.Instance.Crossfade("Battle",.5f);
-            OnPrepareBattle?.Invoke(playerData,enemyData);
+            //AudioManager.Instance.Crossfade("Battle",.5f);
+            OnPrepareBattle?.Invoke(playerData);
             ScreenFader.Instance.FadeOut(.5f);
         }
 
@@ -78,29 +89,28 @@ namespace Core
         {
             _playerPartyData = playerParty;
             _enemyPartyData = enemyParty;
-        
+            
             OnPartyInitialized?.Invoke(playerParty);
-            OnStateChange?.Invoke(BattleState.PlayerTurn);
-            _currentState = BattleState.PlayerTurn;
+            OnStateChange?.Invoke(BattleState.ActionPhase);
+            _currentState = BattleState.ActionPhase;
+            GenerateTurnOrder();
         
-            StateUpdate(_currentState);
+            ProcessNextTurn();
         }
 
         private void SetSelectedUnit(BattleCharacterData unit)
         {
             if (ActiveUnit != null)
             {
-                ActiveUnit.BattleCharacterView.ShowHighlight(false);
+                ActiveUnit.BattleCharacterView.FocusOnUnit(false);
             }
         
             ActiveUnit = unit;
-            foreach (var partyUnit in _playerPartyData)
+            if (unit.Team == Team.Player)
             {
-                if (partyUnit != null)
-                {
-                    partyUnit.BattleCharacterView.ShowHighlight(ActiveUnit == partyUnit);
-                }
+                unit.BattleCharacterView.FocusOnUnit(true);
             }
+            Debug.Log(unit.CharacterStat.BaseData.CharacterName,ActiveUnit.BattleCharacterView);
             BattleUIManager.Instance.OnUnitSelected?.Invoke(ActiveUnit);
         }
     
@@ -109,20 +119,24 @@ namespace Core
             _selectedBattleAction = action;
         
             if(ActiveUnit.Team != Team.Player) return;
-            BattleUIManager.Instance.ToggleCursor(true);
-            foreach (var enemy in _enemyPartyData)
+            //BattleUIManager.Instance.ToggleCursor(true);
+            foreach (var unit in _sortedTurnOrder)
             {
-                enemy.BattleCharacterView.SetSelectable(true);
+                if (unit.Team == Team.Enemy)
+                {
+                    unit.BattleCharacterView.SetSelectable(true);
+                }
+                
             }
         }
 
         public void ExecuteActionCommand(BattleCharacterData target)
         {
-            BattleUIManager.Instance.ToggleCursor(false);
+            //BattleUIManager.Instance.ToggleCursor(false);
             foreach (var partyUnit in _enemyPartyData)
             {
                 partyUnit.BattleCharacterView.SetSelectable(false);
-                partyUnit.BattleCharacterView.ShowHighlight(false);
+                partyUnit.BattleCharacterView.FocusOnUnit(false);
             }
         
             var command = SelectedBattleAction.CreateBattleCommand(ActiveUnit, target);
@@ -174,39 +188,24 @@ namespace Core
                 _currentState = BattleState.BattleWon;
                 return;
             }
-
-            var nextState = _currentState == BattleState.PlayerTurn ? BattleState.EnemyTurn : BattleState.PlayerTurn;
-          
-            OnStateChange?.Invoke(nextState);
-            _currentState = nextState;
-        
-            StateUpdate(_currentState);
+            _sortedTurnOrder.Remove(ActiveUnit);
+            ProcessNextTurn();
         }
 
-        private void StateUpdate(BattleState nextState)
+        private void ProcessNextTurn()
         {
-            switch (nextState)
+            if (_sortedTurnOrder.Count == 0)
             {
-                case BattleState.PlayerTurn:
-                    PlayerTurn();
-                    break;
-                case BattleState.EnemyTurn:
-                    EnemyTurn();
-                    break;
+                GenerateTurnOrder();
             }
-        }
-
-        private void PlayerTurn()
-        {
-            var unit = GetAvailableUnit(_playerPartyData, ref _currentPlayerIndex);
+            
+            var unit = _sortedTurnOrder[0];
             SetSelectedUnit(unit);
-        }
 
-        private void EnemyTurn()
-        {
-            var unit = GetAvailableUnit(_enemyPartyData, ref _currentEnemyIndex);
-            SetSelectedUnit(unit);
-            ActiveUnit.CharacterStat.GetComponent<EnemyAI>().PickCombatMove();
+           if(unit.Team == Team.Enemy)
+            {
+                ActiveUnit.CharacterStat.GetComponent<EnemyCombat>().PickCombatMove();
+            }
         }
 
         public BattleCharacterData GetRandomPlayerUnit()
@@ -231,22 +230,19 @@ namespace Core
             AudioManager.Instance.Crossfade("Overworld",.5f);
         }
 
-        private BattleCharacterData GetAvailableUnit(List<BattleCharacterData> party, ref int currentUnitIndex)
+        private void GenerateTurnOrder()
         {
-            for (var i = 0; i < party.Count; i++)
-            {
-                var index = (currentUnitIndex + i) % party.Count;
-                if (party[index].CharacterStat.Stat.CurrentHealth <= 0) continue;
-                
-                var unit = party[index];
-                
-                //to prevent selected unit selected again
-                currentUnitIndex = index + 1;
-                return unit;
-            }
-            
-            Debug.LogWarning("No available unit, something went wrong.");
-            return null;
+            var order = new List<BattleCharacterData>();
+            order.AddRange(_playerPartyData);
+            order.AddRange(_enemyPartyData);
+            var sorted = order.Where(x => x.CharacterStat.Stat.CurrentHealth > 0)
+                .OrderByDescending(x => x.CharacterStat.Stat.Speed);
+            _sortedTurnOrder = sorted.ToList();
+        }
+
+        private void RemoveUnitFromQueue(BattleCharacterData unit)
+        {
+            _sortedTurnOrder.Remove(unit);
         }
     }
 }

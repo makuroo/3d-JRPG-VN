@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f68e3a3291c0d47a0e41a5f922d9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.System.QuitUI
-  _actionAsset: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  _actionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _quitPanel: {fileID: 8009267564177897519}
   _raycaster: {fileID: 6565154357071833232}
 --- !u!1 &8353762119252868070

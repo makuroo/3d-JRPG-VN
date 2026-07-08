@@ -10,12 +10,22 @@ namespace Core
         Cutscene
     }
 
+    public enum GameMode
+    {
+        Battle,
+        Exploration,
+        None
+    }
+
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
         public Action<GameState> OnGameStateChange;
         private GameState _currentState;
         public GameState CurrentState => _currentState;
+        
+        private GameMode _gameMode;
+        public GameMode GameMode => _gameMode;
 
         private void Awake()
         {
@@ -36,6 +46,10 @@ namespace Core
             OnGameStateChange?.Invoke(newState);
             _currentState = newState;
         }
-        
+
+        public void UpdateGameMode(GameMode gameMode)
+        {
+            _gameMode = gameMode;
+        }
     }
 }

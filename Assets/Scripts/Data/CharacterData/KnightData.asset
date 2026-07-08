@@ -15,9 +15,9 @@ MonoBehaviour:
   CharacterName: Knight
   MaxHealth: 100
   Damage: 10
-  Speed: 0
-  Def: 0
-  CombatPrefab: {fileID: 3820140036768343084, guid: 9d52a2a61fa381e46a4bf3aa4b5d56d8, type: 3}
+  Speed: 25
+  Def: 5
+  CombatPrefab: {fileID: 1464521658211185630, guid: 777d3823338868642bac0cb4d65d0c18, type: 3}
   Actions:
   - {fileID: 11400000, guid: b2dc3a7f3f470f34c84ef580d03d5410, type: 2}
   AttackSFX: PlayerAttack

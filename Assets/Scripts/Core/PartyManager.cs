@@ -1,16 +1,21 @@
 using System.Collections.Generic;
 using Battle;
 using Data.CharacterData;
-using Data.PartyDatabase;
+using Data.UnitDatabase;
 using UnityEngine;
+using System.Linq;
 
 namespace Core
 {
    public class PartyManager : MonoBehaviour
    { 
-      [SerializeField] private PartyDatabaseSO databaseSo;
+      [SerializeField] private UnitDatabaseSO databaseSo;
       public static PartyManager Instance;
       private readonly Dictionary<CharacterDataSo, List<BattleCharacterData>> _runtimePartyData = new();
+      private HashSet<CharacterDataSo> _pickedUnits = new();
+
+      public List<BattleCharacterData> PlayerPartyData = new List<BattleCharacterData>();
+      public List<BattleCharacterData> EnemyPartyData = new List<BattleCharacterData>();
       private void Awake()
       {
          if (Instance == null)
@@ -24,20 +29,39 @@ namespace Core
          DontDestroyOnLoad(gameObject);
       }
 
-      public List<BattleCharacterData> GetParty(CharacterDataSo leaderData)
+      public void InitializePartyData(CharacterDataSo pickedUnit)
       {
-         if (_runtimePartyData.TryGetValue(leaderData, out var party)) return party;
-      
-         _runtimePartyData.Add(leaderData, new List<BattleCharacterData>());
+         PlayerPartyData = GetParty(pickedUnit);
+         EnemyPartyData = GetParty();
+      }
 
-         var partyCharacterSo = databaseSo.Database[leaderData];
-         foreach (var partyData in partyCharacterSo)
+      private  List<BattleCharacterData> GetParty(CharacterDataSo includedCharacter = null, int maxPartySize = 2)
+      {
+         var result = new List<BattleCharacterData>();
+         for (int i = 0; i < maxPartySize; i++)
          {
-            var runtimeData = new BattleCharacterData(partyData);
-            _runtimePartyData[leaderData].Add(runtimeData);
+            if (includedCharacter && !_pickedUnits.Contains(includedCharacter))
+            {
+               var battleData = new BattleCharacterData(includedCharacter);
+               result.Add(battleData);
+               _pickedUnits.Add(includedCharacter);
+               Debug.Log(battleData.CharacterDataSo.CharacterName);
+               continue;
+            }
+            
+            var filteredList = databaseSo.Database.Except(_pickedUnits).ToList();
+            if (filteredList.Count <= 0)
+            {
+               Debug.LogError("Not enough units");
+               return new List<BattleCharacterData>();
+            }
+
+            var pickedUnit = filteredList[Random.Range(0, filteredList.Count)];
+            result.Add(new BattleCharacterData(pickedUnit));
+            _pickedUnits.Add(pickedUnit);
+            Debug.Log(pickedUnit.CharacterName);
          }
-      
-         return _runtimePartyData[leaderData];
+         return result;
       }
    }
 }
