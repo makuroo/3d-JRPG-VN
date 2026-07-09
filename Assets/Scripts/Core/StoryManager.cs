@@ -42,6 +42,7 @@ namespace Core
         //Mostly called from fungus
         public void ChangeState(StoryState newState)
         {
+            Debug.Log($"Changing state to {newState}");
             _currentState = newState;
             OnStateChange?.Invoke(newState);
         }

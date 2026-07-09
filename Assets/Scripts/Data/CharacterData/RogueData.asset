@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatDataSO
   CharacterName: Rogue
   MaxHealth: 80
-  Damage: 12
+  Damage: 15
   Speed: 20
-  Def: 3
+  Def: 5
   CombatPrefab: {fileID: 549021502251983720, guid: 1c25b65eb68dde64bb776bfa2cad4c0e, type: 3}
   Actions:
-  - {fileID: 11400000, guid: b2dc3a7f3f470f34c84ef580d03d5410, type: 2}
+  - {fileID: 11400000, guid: fe77eff5927477b40b23193a0fba7b20, type: 2}
+  - {fileID: 11400000, guid: 1849586cd5221394b940a1964787c40f, type: 2}
   AttackSFX: EnemyAttack
   DamagedSFX: EnemyDamaged

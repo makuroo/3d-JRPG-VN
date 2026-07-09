@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: KnightData
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatDataSO
   CharacterName: Knight
-  MaxHealth: 100
+  MaxHealth: 150
   Damage: 10
   Speed: 25
-  Def: 5
+  Def: 10
   CombatPrefab: {fileID: 1464521658211185630, guid: 777d3823338868642bac0cb4d65d0c18, type: 3}
   Actions:
-  - {fileID: 11400000, guid: b2dc3a7f3f470f34c84ef580d03d5410, type: 2}
+  - {fileID: 11400000, guid: fe77eff5927477b40b23193a0fba7b20, type: 2}
+  - {fileID: 11400000, guid: 475186a5b8b3d3d4b995a076e24b85aa, type: 2}
   AttackSFX: PlayerAttack
   DamagedSFX: PlayerDamaged

@@ -15,10 +15,11 @@ MonoBehaviour:
   CharacterName: Barbarian
   MaxHealth: 200
   Damage: 7
-  Speed: 20
+  Speed: 10
   Def: 10
   CombatPrefab: {fileID: 4176276332662386860, guid: 63c39ed0322fcfe47b8333c198a3487a, type: 3}
   Actions:
-  - {fileID: 11400000, guid: b2dc3a7f3f470f34c84ef580d03d5410, type: 2}
+  - {fileID: 11400000, guid: fe77eff5927477b40b23193a0fba7b20, type: 2}
+  - {fileID: 11400000, guid: 98d09a03e806254428ba903583788a0e, type: 2}
   AttackSFX: EnemyAttack
   DamagedSFX: EnemyDamaged

@@ -17,7 +17,8 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 5707446414437178438, guid: a62adc0844d27754fa3ff197fd040361, type: 3}
-    - {fileID: 2680336560617072761, guid: bbfd26f12b6be6644b07d33a04715363, type: 3}
+    - {fileID: 8307060409358143758, guid: 8f767d0b23c8e3b4cb2ead5380b1074d, type: 3}
+    - {fileID: 6547965365630005983, guid: a5f2e1a561eda814091741bf454dd28c, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -36,7 +37,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
       Data: 
@@ -63,13 +64,34 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: DustParticle
+      Data: SwordSlash
     - Name: $v
       Entry: 7
       Data: 3|Data.VfxData.PoolableData, Assembly-CSharp
     - Name: prefab
       Entry: 10
       Data: 1
+    - Name: count
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Explosion
+    - Name: $v
+      Entry: 7
+      Data: 4|Data.VfxData.PoolableData, Assembly-CSharp
+    - Name: prefab
+      Entry: 10
+      Data: 2
     - Name: count
       Entry: 3
       Data: 5

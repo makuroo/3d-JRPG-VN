@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatDataSO
   CharacterName: Mage
   MaxHealth: 95
-  Damage: 10
-  Speed: 20
+  Damage: 25
+  Speed: 15
   Def: 5
   CombatPrefab: {fileID: 601192738426031456, guid: dacccafea97eb704da337cacfffcedc3, type: 3}
   Actions:
-  - {fileID: 11400000, guid: b2dc3a7f3f470f34c84ef580d03d5410, type: 2}
+  - {fileID: 11400000, guid: e1cbf306d8954ff478a8ca204e241641, type: 2}
   AttackSFX: EnemyAttack
   DamagedSFX: EnemyDamaged

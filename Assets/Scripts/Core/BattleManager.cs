@@ -89,12 +89,16 @@ namespace Core
         {
             _playerPartyData = playerParty;
             _enemyPartyData = enemyParty;
+
+            foreach (var player in playerParty)
+            {
+                player.CharacterCombat.OnDeath += RemoveUnitFromQueue;
+            }
             
             OnPartyInitialized?.Invoke(playerParty);
             OnStateChange?.Invoke(BattleState.ActionPhase);
             _currentState = BattleState.ActionPhase;
             GenerateTurnOrder();
-        
             ProcessNextTurn();
         }
 
@@ -120,14 +124,20 @@ namespace Core
         
             if(ActiveUnit.Team != Team.Player) return;
             //BattleUIManager.Instance.ToggleCursor(true);
-            foreach (var unit in _sortedTurnOrder)
+            foreach (var unit in _enemyPartyData)
             {
-                if (unit.Team == Team.Enemy)
+                if (unit.Stat.CurrentHealth > 0)
                 {
+                    Debug.Log($"Enable {unit.CharacterDataSo.CharacterName} Selectable",unit.BattleCharacterView);
                     unit.BattleCharacterView.SetSelectable(true);
                 }
-                
             }
+        }
+
+        private IEnumerator BattleIntroCoroutine()
+        {
+            yield return new WaitForSeconds(1f);
+            ProcessNextTurn();
         }
 
         public void ExecuteActionCommand(BattleCharacterData target)
@@ -154,6 +164,7 @@ namespace Core
             {
                 partyUnit.BattleCharacterView.SetSelectable(false);
             }
+            //Debug.Log(Time.time);
             yield return StartCoroutine(command.Execute());
             _selectedBattleAction = null;
             DetermineOutcome();
@@ -190,6 +201,7 @@ namespace Core
             }
             _sortedTurnOrder.Remove(ActiveUnit);
             ProcessNextTurn();
+            //Debug.Log(Time.time);
         }
 
         private void ProcessNextTurn()
@@ -210,7 +222,9 @@ namespace Core
 
         public BattleCharacterData GetRandomPlayerUnit()
         {
-            return _playerPartyData[Random.Range(0, _playerPartyData.Count)];
+            var aliveAlly = _playerPartyData.Where(x => x.Stat.CurrentHealth > 0).ToList();
+            var pickedAlly = aliveAlly[Random.Range(0,aliveAlly.Count)];
+            return pickedAlly;
         }
 
         public void ReturnToOverworld()
@@ -242,6 +256,7 @@ namespace Core
 
         private void RemoveUnitFromQueue(BattleCharacterData unit)
         {
+            Debug.Log(unit.CharacterStat.BaseData.CharacterName);
             _sortedTurnOrder.Remove(unit);
         }
     }

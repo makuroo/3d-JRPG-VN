@@ -120,6 +120,7 @@ Material:
     - _Usecenterglow: 0
     - _Usecustomrandom: 0
     - _Usedepth: 0
+    - _VertexAlphaRef: 1
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.8156863, g: 0.5607843, b: 0.36470586, a: 0.9647059}
@@ -131,6 +132,6 @@ Material:
     - _OverlayColor: {r: 1, g: 1, b: 1, a: 1}
     - _OverlayFlowSpeed: {r: 0, g: 0, b: 0, a: 0}
     - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
-    - _TintColor: {r: 0.8161765, g: 0.56163865, b: 0.36607915, a: 0.653}
+    - _TintColor: {r: 766.9961, g: 527.79596, b: 344.0203, a: 0.57254905}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac547b8adcd67b44b2db4b309371654, type: 3}
+  m_Name: JumpAttack
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ActionData.BattleAction
+  Name: JumpAttack
+  Description: 
+  _actionSteps:
+  - rid: 6710719871667667124
+  - rid: 6710719871667667125
+  - rid: 6710719871667667131
+  references:
+    version: 2
+    RefIds:
+    - rid: 6710719871667667124
+      type: {class: MoveToTarget, ns: Core.Actions, asm: Assembly-CSharp}
+      data:
+        _duration: 0.5
+        _stopRange: 2
+        _toSpawnPos: 0
+    - rid: 6710719871667667125
+      type: {class: ParallelSteps, ns: Core.Actions, asm: Assembly-CSharp}
+      data:
+        _actionSteps:
+        - rid: 6710719871667667126
+        - rid: 6710719871667667127
+        - rid: 6710719871667667185
+    - rid: 6710719871667667126
+      type: {class: PlayAnimation, ns: Core.Actions, asm: Assembly-CSharp}
+      data:
+        _animationName: Skill1
+    - rid: 6710719871667667127
+      type: {class: DamageWithDelay, ns: Core.Actions, asm: Assembly-CSharp}
+      data:
+        _delay: 0.2
+    - rid: 6710719871667667131
+      type: {class: MoveToTarget, ns: Core.Actions, asm: Assembly-CSharp}
+      data:
+        _duration: 0.5
+        _stopRange: 0
+        _toSpawnPos: 1
+    - rid: 6710719871667667185
+      type: {class: SpawnVfx, ns: Core.Actions, asm: Assembly-CSharp}
+      data:
+        _vfxId: SwordSlash
+        _activeDuration: 1
+        _targetSelf: 0

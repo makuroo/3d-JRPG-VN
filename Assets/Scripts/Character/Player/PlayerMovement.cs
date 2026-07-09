@@ -11,12 +11,12 @@ namespace Character.Player
       [SerializeField] private Animator _animator;
 
       private Vector2 _inputDirection;
-      private Rigidbody2D _rigidbody;
-      private int VELOCITY = Animator.StringToHash("velocityMagnitude");
+      private Rigidbody _rigidbody;
+      private int VELOCITY = Animator.StringToHash("Velocity");
       private void Awake()
       {
 
-         _rigidbody = GetComponent<Rigidbody2D>();
+         _rigidbody = GetComponent<Rigidbody>();
       }
 
       private void OnEnable()
@@ -52,12 +52,12 @@ namespace Character.Player
             return;
          }
          _animator.SetFloat(VELOCITY, _inputDirection.magnitude);
-         Checkflip();
+         //Checkflip();
       }
 
       private void FixedUpdate()
       {
-         _rigidbody.linearVelocity = _inputDirection * _speed;
+         _rigidbody.linearVelocity = new Vector3(_inputDirection.x,_rigidbody.linearVelocity.y,_inputDirection.y) * _speed;
       }
 
       private void Checkflip()

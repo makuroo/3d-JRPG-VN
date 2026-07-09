@@ -1,3 +1,4 @@
+using System;
 using Character;
 using Core;
 using DG.Tweening;
@@ -11,6 +12,8 @@ namespace Battle
     {
         private CharacterStat _stat;
         private BattleCharacterView _view;
+        public Action<BattleCharacterData> OnDeath;
+        public Action<float,float> OnTakeDamage;
 
         private void Start()
         {
@@ -20,31 +23,22 @@ namespace Battle
 
         public void TakeDamage(float damage)
         {
-            var sprite = _view.GetComponent<SpriteRenderer>();
-            
             if (_stat.Stat.CurrentHealth <=0) return;
             _stat.Stat.CurrentHealth -= damage;
-            _stat.OnStatChange?.Invoke();
-           
-            //Show damage popup
-            // var popup =VfxManager.Instance.SpawnFromPool("DamagePopup", transform.position, 1f);
-            // popup.GetComponent<DamagePopup>().Initialize(damage.ToString());
-            // _view.PlayDamagedAudio();
-            
-            //unit alpha fade
-            // sprite.DOFade(.5f, 0.2f).OnComplete(() =>
-            // {
-            //     sprite.DOFade(1, .2f);
-            // });
-            
-            //punch backward
-            //transform.DOPunchPosition(-transform.right,.3f,1);
+            OnTakeDamage?.Invoke(_stat.Stat.MaxHealth, _stat.Stat.CurrentHealth);
+
+            Debug.Log(_view.Owner.Team == Team.Player && (_stat.Stat.CurrentHealth / _stat.Stat.MaxHealth) < .3f);
+            if (_view.Owner.Team == Team.Player && (_stat.Stat.CurrentHealth / _stat.Stat.MaxHealth) < .3f)
+            {
+                PostProcessManager.Instance.ActivateVignette(.3f,Color.red, 5f);
+            }
             
             _view.PlayAnimation("Hit");
             
             if (_stat.Stat.CurrentHealth <= 0)
             {
                 _view.PlayAnimation("Dead");
+                OnDeath?.Invoke(_view.Owner);
             }
         }
     }

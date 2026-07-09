@@ -44,9 +44,10 @@ namespace Battle
                 for (int i = 0; i < Mathf.Min(stationList.Count,party.Count); i++)
                 { 
                     var unit = Instantiate(party[i].CharacterDataSo.CombatPrefab, stationList[i]);
-                    Debug.Log(unit,unit);
                     if(unit == null) continue;
-                   
+                    
+                    party[i].SpawnPos = unit.transform.localPosition;
+                    
                     var unitStat = unit.GetComponent<CharacterStat>();
                     unitStat.SetRuntimeStat(party[i].Stat);
                     
@@ -57,6 +58,7 @@ namespace Battle
                     party[i].Team = team;
                     party[i].BattleCharacterView = unitView;
                     party[i].CharacterStat = unitStat;
+                    party[i].CharacterCombat = unit.GetComponent<CharacterCombat>();
                 
                     spawnedUnits.Add(party[i]);
                     Debug.Log($"{party[i].CharacterStat.BaseData.CharacterName} {party[i].BattleCharacterView.Owner.Team}", party[i].BattleCharacterView);

@@ -27,8 +27,6 @@ namespace Battle
         public void FocusOnUnit(bool focus)
         {
             _unitCamera.Priority.Value = focus ? 10 : 0;
-            Debug.Log($"{focus} is focusing, camera priority is {_unitCamera.Priority.Value}", this);
-            //_selectedHighlight.gameObject.SetActive(show);
         }
 
         public void SetSelectable(bool selectable)
@@ -46,7 +44,7 @@ namespace Battle
             _animator.Play(targetAnim);
         }
     
-        public bool IsAnimationPlaying()
+        public bool IsAnimationCompleted()
         {
             return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && !_animator.IsInTransition(0);
         }

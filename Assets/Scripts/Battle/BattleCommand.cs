@@ -1,62 +1,41 @@
 using System.Collections;
-using Character;
+using System.Collections.Generic;
 using DG.Tweening;
+using Interface;
 using UnityEngine;
 
 namespace Battle
 {
     public abstract class BattleCommand
     {
-        protected BattleCharacterData Source;
-        protected BattleCharacterData Target;
+        [SerializeReference] protected List<IActionStep> _actionSteps;
+        protected BattleCharacterData _source;
+        protected BattleCharacterData _target;
 
         protected BattleCommand(BattleCharacterData source, BattleCharacterData target)
         {
-            Source = source;
-            Target = target;
+            _source = source;
+            _target = target;
         }
 
         public abstract IEnumerator Execute();
     }
 
-    public class BasicAttackCommand : BattleCommand
+    public class ActionCommand : BattleCommand
     {
-        public BasicAttackCommand(BattleCharacterData source, BattleCharacterData target) : base(source, target)
+        public ActionCommand(BattleCharacterData source, BattleCharacterData target, List<IActionStep> actionSteps) : base(source, target)
         {
-            Source = source;
-            Target = target;
+            _source = source;
+            _target = target;
+            _actionSteps = actionSteps;
         }
 
         public override IEnumerator Execute()
         {
-            var view = Source.BattleCharacterView;
-            var originalPos = view.transform.position;
-            
-            var direction = originalPos - Target.BattleCharacterView.transform.position;
-            direction.y = 0;
-            direction.Normalize();
-            
-            var moveForwardTween =
-                Source.BattleCharacterView.transform.DOMove(
-                    Target.BattleCharacterView.transform.position + (direction * 3f), 0.2f);
-        
-            yield return moveForwardTween.WaitForCompletion();
-            view.PlayAnimation("BasicAttack");
-            //make sure we enter attack state
-            yield return null;
-        
-            yield return new WaitUntil(() => view.IsAnimationPlaying());
-        
-            var combat = Target.CharacterStat.GetComponent<CharacterCombat>();
-            
-            combat.TakeDamage(Source.Stat.Damage);
-        
-            var moveBackwardTween =
-                Source.BattleCharacterView.transform.DOMove(
-                    originalPos, 0.2f);
-        
-            yield return moveBackwardTween.WaitForCompletion();
-            view.PlayAnimation("Idle");
+            foreach (var actionStep in _actionSteps)
+            {
+                yield return actionStep.Execute(_source, _target);
+            }
         }
     }
 }

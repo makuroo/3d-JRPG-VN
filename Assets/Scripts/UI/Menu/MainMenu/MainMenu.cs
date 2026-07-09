@@ -1,5 +1,7 @@
 using Core;
+using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI.Menu.MainMenu
 {
@@ -16,12 +18,7 @@ namespace UI.Menu.MainMenu
         public void PickExplorationMode()
         {
             GameManager.Instance.UpdateGameMode(GameMode.Exploration);
-            Debug.Log("Exploration Mode");
-        }
-
-        public void ExitGame()
-        {
-            Application.Quit();
+            SceneManager.LoadScene("VN");
         }
     }
 }

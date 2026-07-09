@@ -18,7 +18,7 @@ namespace Character.NPC
         {
             if(StoryManager.Instance != null)
                 StoryManager.Instance.OnStateChange += UpdateBlockName;
-            _interactUI.SetActive(false);
+            //_interactUI?.SetActive(false);
         }
 
         private void OnDisable()
@@ -29,9 +29,10 @@ namespace Character.NPC
 
         public void Interact()
         {
+            Debug.Log(_currStoryBlockName);
             if(IsNullOrEmpty(_currStoryBlockName)) return;
             Flowchart.BroadcastFungusMessage(_currStoryBlockName); 
-            _interactUI.SetActive(false);
+           // _interactUI?.SetActive(false);
         }
 
         private void UpdateBlockName(StoryState state)

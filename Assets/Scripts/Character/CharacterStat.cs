@@ -46,8 +46,6 @@ namespace Character
         [FormerlySerializedAs("baseData")] [SerializeField] private CharacterDataSo _baseData;
         private RuntimeStat _stat;
         public RuntimeStat Stat => _stat;
-    
-        public Action OnStatChange;
 
         public CharacterDataSo BaseData => _baseData;
 

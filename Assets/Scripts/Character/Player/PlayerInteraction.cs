@@ -22,7 +22,7 @@ namespace Character.Player
          _actionAsset.FindAction("Interact").performed-= ProcessInteraction;
       }
 
-      private void OnTriggerEnter2D(Collider2D other)
+      private void OnTriggerEnter(Collider other)
       {
          if (other.TryGetComponent(out IInteractable interactable))
          {
@@ -30,7 +30,7 @@ namespace Character.Player
          }
       }
 
-      private void OnTriggerExit2D(Collider2D other)
+      private void OnTriggerExit(Collider other)
       {
          if (other.TryGetComponent(out IInteractable interactable) && _interactable == interactable)
          {
