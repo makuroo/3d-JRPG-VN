@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Fungus;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -45,7 +46,9 @@ namespace UI.System
 
         public void MainMenu()
         {
-            SceneManager.LoadScene("Menu");
+            _raycaster.enabled = false;
+            _quitPanel.gameObject.SetActive(false);
+            StartCoroutine(GameManager.Instance.ScreenTransition("Menu"));
         }
     }
 }
