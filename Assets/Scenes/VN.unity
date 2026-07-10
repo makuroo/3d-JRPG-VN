@@ -1275,6 +1275,50 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 408318780}
   m_SourcePrefab: {fileID: 100100000, guid: 2c8f91964d113444e848a2ccb36ba1d1, type: 3}
+--- !u!1 &1809273990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1809273992}
+  - component: {fileID: 1809273991}
+  m_Layer: 0
+  m_Name: DialogueHistoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1809273991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809273990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e3c36c806df65d42ae0bdd570b736dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.DialogHistoryManager
+--- !u!4 &1809273992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809273990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.28596, y: -1.15202, z: 18.52743}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1828056812
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,3 +1802,4 @@ SceneRoots:
   - {fileID: 2134054632}
   - {fileID: 459976217}
   - {fileID: 1054746541}
+  - {fileID: 1809273992}

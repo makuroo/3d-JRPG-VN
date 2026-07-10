@@ -227,7 +227,8 @@ namespace Core
 
         public void RemoveUnitFromQueue(BattleCharacterData unit)
         {
-            _sortedTurnOrder.Remove(unit);
+            if(_sortedTurnOrder.Contains(unit))
+                _sortedTurnOrder.Remove(unit);
         }
     }
 }

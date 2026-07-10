@@ -39,15 +39,14 @@ namespace Core
                 var rawText = sayCommand.GetStandardText();
                 processedText = sayCommand.GetFlowchart().SubstituteVariables(rawText);
             }
-
-            var dialogHistory = new HistoryData();
+            
             if (sayCommand != null)
             {
+                var dialogHistory = new HistoryData();
                 dialogHistory.CharacterName = sayCommand._Character.NameText;
                 dialogHistory.Dialog = processedText;
+                _historyData.Add(dialogHistory);
             }
-
-            _historyData.Add(dialogHistory);
         }
 
         private void ClearHistoryOnBlockCompleted(Block block)
