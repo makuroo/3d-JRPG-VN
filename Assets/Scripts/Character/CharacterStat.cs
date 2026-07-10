@@ -49,11 +49,6 @@ namespace Character
 
         public CharacterDataSo BaseData => _baseData;
 
-        private void Awake()
-        {
-            _stat = new RuntimeStat(_baseData);
-        }
-
         public void SetRuntimeStat(RuntimeStat stat)
         {
             _stat = stat;

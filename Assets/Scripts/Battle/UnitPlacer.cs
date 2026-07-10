@@ -37,7 +37,6 @@ namespace Battle
     
         private List<BattleCharacterData> PlaceUnits(List<BattleCharacterData> party, Dictionary<int, List<Transform>> partyStations, Team team)
         {
-            Debug.Log("Placing " + party.Count + " units");
             List<BattleCharacterData> spawnedUnits = new List<BattleCharacterData>();
             if (partyStations.TryGetValue(party.Count, out var stationList))
             {
@@ -45,23 +44,19 @@ namespace Battle
                 { 
                     var unit = Instantiate(party[i].CharacterDataSo.CombatPrefab, stationList[i]);
                     if(unit == null) continue;
-                    
                     party[i].SpawnPos = unit.transform.localPosition;
                     
                     var unitStat = unit.GetComponent<CharacterStat>();
                     unitStat.SetRuntimeStat(party[i].Stat);
                     
                     var unitView = unit.GetComponentInChildren<BattleCharacterView>();
-                   
-                    unitView.Owner = party[i];
-                
                     party[i].Team = team;
                     party[i].BattleCharacterView = unitView;
                     party[i].CharacterStat = unitStat;
                     party[i].CharacterCombat = unit.GetComponent<CharacterCombat>();
+                    unitView.Initialize(party[i]);
                 
                     spawnedUnits.Add(party[i]);
-                    Debug.Log($"{party[i].CharacterStat.BaseData.CharacterName} {party[i].BattleCharacterView.Owner.Team}", party[i].BattleCharacterView);
                 }
             }  
         

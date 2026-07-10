@@ -1,3 +1,4 @@
+using System;
 using Battle;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace UI.Battle
         [SerializeField] private TMP_Text _nameText;
         [SerializeField] protected  TMP_Text _hpText;
         [SerializeField] private Image _hpFill;
+        private BattleCharacterData _characterData;
         
         public void Initialize(BattleCharacterData data)
         {
@@ -18,6 +20,14 @@ namespace UI.Battle
             _hpFill.fillAmount = data.Stat.CurrentHealth / data.Stat.MaxHealth;
 
             data.CharacterCombat.OnTakeDamage += UpdateStatusUI;
+        }
+
+        private void OnDisable()
+        {
+            if (_characterData != null && _characterData.CharacterCombat != null)
+            {
+                _characterData.CharacterCombat.OnTakeDamage -= UpdateStatusUI;
+            }
         }
 
         private void UpdateStatusUI(float maxHealth, float currentHealth)

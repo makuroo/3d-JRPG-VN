@@ -1,9 +1,7 @@
 using System;
 using Character;
 using Core;
-using DG.Tweening;
 using Interface;
-using UI.Battle;
 using UnityEngine;
 
 namespace Battle
@@ -21,23 +19,19 @@ namespace Battle
             _view = GetComponentInChildren<BattleCharacterView>();
         }
 
+        private void OnDisable()
+        {
+            OnDeath -= BattleManager.Instance.RemoveUnitFromQueue;
+        }
+
         public void TakeDamage(float damage)
         {
             if (_stat.Stat.CurrentHealth <=0) return;
             _stat.Stat.CurrentHealth -= damage;
             OnTakeDamage?.Invoke(_stat.Stat.MaxHealth, _stat.Stat.CurrentHealth);
-
-            Debug.Log(_view.Owner.Team == Team.Player && (_stat.Stat.CurrentHealth / _stat.Stat.MaxHealth) < .3f);
-            if (_view.Owner.Team == Team.Player && (_stat.Stat.CurrentHealth / _stat.Stat.MaxHealth) < .3f)
-            {
-                PostProcessManager.Instance.ActivateVignette(.3f,Color.red, 5f);
-            }
-            
-            _view.PlayAnimation("Hit");
             
             if (_stat.Stat.CurrentHealth <= 0)
             {
-                _view.PlayAnimation("Dead");
                 OnDeath?.Invoke(_view.Owner);
             }
         }

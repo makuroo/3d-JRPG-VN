@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
@@ -50,6 +52,13 @@ namespace Core
         public void UpdateGameMode(GameMode gameMode)
         {
             _gameMode = gameMode;
+        }
+        
+        public IEnumerator ScreenTransition(string targetScene)
+        {
+            var handler = SceneManager.LoadSceneAsync(targetScene);
+            yield return handler;
+            ScreenFader.Instance.FadeOut(.5f);
         }
     }
 }

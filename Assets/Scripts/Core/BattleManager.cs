@@ -49,8 +49,6 @@ namespace Core
         private List<BattleCharacterData> _enemyPartyData = new();
     
         private BattleActionSO _selectedBattleAction;
-        private int _currentPlayerIndex;
-        private int _currentEnemyIndex;
         
         private List<BattleCharacterData> _sortedTurnOrder = new();
 
@@ -89,16 +87,16 @@ namespace Core
         {
             _playerPartyData = playerParty;
             _enemyPartyData = enemyParty;
-
-            foreach (var player in playerParty)
-            {
-                player.CharacterCombat.OnDeath += RemoveUnitFromQueue;
-            }
             
             OnPartyInitialized?.Invoke(playerParty);
             OnStateChange?.Invoke(BattleState.ActionPhase);
             _currentState = BattleState.ActionPhase;
             GenerateTurnOrder();
+            
+            foreach (var unit in _sortedTurnOrder)
+            {
+                unit.CharacterCombat.OnDeath += RemoveUnitFromQueue;
+            }
             ProcessNextTurn();
         }
 
@@ -114,7 +112,6 @@ namespace Core
             {
                 unit.BattleCharacterView.FocusOnUnit(true);
             }
-            Debug.Log(unit.CharacterStat.BaseData.CharacterName,ActiveUnit.BattleCharacterView);
             BattleUIManager.Instance.OnUnitSelected?.Invoke(ActiveUnit);
         }
     
@@ -123,26 +120,17 @@ namespace Core
             _selectedBattleAction = action;
         
             if(ActiveUnit.Team != Team.Player) return;
-            //BattleUIManager.Instance.ToggleCursor(true);
             foreach (var unit in _enemyPartyData)
             {
                 if (unit.Stat.CurrentHealth > 0)
                 {
-                    Debug.Log($"Enable {unit.CharacterDataSo.CharacterName} Selectable",unit.BattleCharacterView);
                     unit.BattleCharacterView.SetSelectable(true);
                 }
             }
         }
 
-        private IEnumerator BattleIntroCoroutine()
-        {
-            yield return new WaitForSeconds(1f);
-            ProcessNextTurn();
-        }
-
         public void ExecuteActionCommand(BattleCharacterData target)
         {
-            //BattleUIManager.Instance.ToggleCursor(false);
             foreach (var partyUnit in _enemyPartyData)
             {
                 partyUnit.BattleCharacterView.SetSelectable(false);
@@ -227,23 +215,6 @@ namespace Core
             return pickedAlly;
         }
 
-        public void ReturnToOverworld()
-        {
-            ScreenFader.Instance.FadeIn(.5f, () =>
-            {
-                ScreenFader.Instance.StartCoroutine(ScreenTransition());
-            });
-        }
-    
-        private IEnumerator ScreenTransition()
-        {
-            var handler = SceneManager.LoadSceneAsync("Overworld");
-            yield return handler;
-            ScreenFader.Instance.FadeOut(.5f);
-            GameManager.Instance.UpdateState(GameState.Exploration);
-            AudioManager.Instance.Crossfade("Overworld",.5f);
-        }
-
         private void GenerateTurnOrder()
         {
             var order = new List<BattleCharacterData>();
@@ -254,9 +225,8 @@ namespace Core
             _sortedTurnOrder = sorted.ToList();
         }
 
-        private void RemoveUnitFromQueue(BattleCharacterData unit)
+        public void RemoveUnitFromQueue(BattleCharacterData unit)
         {
-            Debug.Log(unit.CharacterStat.BaseData.CharacterName);
             _sortedTurnOrder.Remove(unit);
         }
     }

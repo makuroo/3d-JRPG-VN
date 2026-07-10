@@ -27,7 +27,7 @@ public class DialogHistory : MonoBehaviour
         var text = _historyUI.GetComponentsInChildren<TMP_Text>();
         foreach (var child in text)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
         
         var data = DialogHistoryManager.instance.HistoryData;

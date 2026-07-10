@@ -2,6 +2,7 @@ using System;
 using Fungus;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.System
@@ -40,6 +41,11 @@ namespace UI.System
         {
             _quitPanel.gameObject.SetActive(false);
             _raycaster.enabled = false;
+        }
+
+        public void MainMenu()
+        {
+            SceneManager.LoadScene("Menu");
         }
     }
 }

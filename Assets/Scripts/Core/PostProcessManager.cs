@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Battle;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -12,10 +14,11 @@ namespace Core
 
         [SerializeField] private Volume _volume;
         private Vignette _vignette;
-        private Bloom _bloom;
         
         private Tween _vignetteStartTween;
         private Tween _vignetteEndTween;
+        
+        private List<BattleCharacterData> _subscribedCharacters = new List<BattleCharacterData>();
         
         private void Awake()
         {
@@ -32,8 +35,15 @@ namespace Core
             if (_volume)
             {
                 _volume.profile.TryGet(out _vignette);
-                _volume.profile.TryGet(out _bloom);
             }
+
+            BattleManager.Instance.OnPartyInitialized += SubscribeToPlayerUnits;
+        }
+
+        private void OnDisable()
+        {
+            BattleManager.Instance.OnPartyInitialized -= SubscribeToPlayerUnits;
+            UnsubscribeAll();
         }
 
         public void ActivateVignette(float intensity, Color color, float duration)
@@ -44,9 +54,8 @@ namespace Core
             {
                 _vignetteStartTween = DOVirtual.Float(0, intensity, 0.5f, value =>
                 {
-                    Debug.Log(value.ToString());
                     _vignette.intensity.value = value;
-                });
+                }).SetAutoKill(false);
             }
             else
             {
@@ -63,7 +72,7 @@ namespace Core
                         {
                             _vignette.intensity.value = value;
                         });
-                    });
+                    }).SetAutoKill(false);
                 }
                 else
                 {
@@ -72,21 +81,31 @@ namespace Core
             }
         }
 
-        public void ActivateBloom(float intensity, Color color, float duration)
+        private void SubscribeToPlayerUnits(List<BattleCharacterData> playerParty)
         {
-            _bloom.intensity.value = intensity;
-            _bloom.tint.value = color;
-            
-            if (duration > -1)
+            UnsubscribeAll();
+            foreach (var player in playerParty)
             {
-                DOVirtual.DelayedCall(duration, () =>
-                {
-                    DOVirtual.Float(_bloom.intensity.value, 0, 0.2f, value =>
-                    {
-                        _bloom.intensity.value = value;
-                    });
-                });
+                player.CharacterCombat.OnTakeDamage += TryApplyLowHpEffect;
+                _subscribedCharacters.Add(player);
             }
+        }
+
+        private void TryApplyLowHpEffect(float maxHealth, float currHealth)
+        {
+            if (currHealth / maxHealth <= .3f)
+            {
+                ActivateVignette(.3f,Color.red, 3f);
+            }
+        }
+
+        private void UnsubscribeAll()
+        {
+            foreach (var player in _subscribedCharacters)
+            {
+                player.CharacterCombat.OnTakeDamage -= TryApplyLowHpEffect;
+            }
+            _subscribedCharacters.Clear();
         }
     }
 }

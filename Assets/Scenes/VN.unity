@@ -164,14 +164,14 @@ MonoBehaviour:
   description: 
   character: {fileID: 504636964}
   portrait: {fileID: 21300000, guid: edde319c37ce048b6bf0462d4f8bd56d, type: 3}
-  voiceOverClip: {fileID: 0}
+  voiceOverClip: {fileID: 8300000, guid: d8964a66b8308924b9ffcf161b77ecd9, type: 3}
   showAlways: 1
   showCount: 1
   extendPrevious: 0
   fadeWhenDone: 1
   waitForClick: 1
   stopVoiceover: 1
-  waitForVO: 0
+  waitForVO: 1
   setSayDialog: {fileID: 0}
 --- !u!114 &104755822
 MonoBehaviour:
@@ -191,14 +191,14 @@ MonoBehaviour:
   description: 
   character: {fileID: 2112413281}
   portrait: {fileID: 21300000, guid: a7ddf97c30db44d2581c9d2b9ec8d39d, type: 3}
-  voiceOverClip: {fileID: 0}
+  voiceOverClip: {fileID: 8300000, guid: 3582963adc4e6de44bcc66590a34c007, type: 3}
   showAlways: 1
   showCount: 1
   extendPrevious: 0
   fadeWhenDone: 1
   waitForClick: 1
   stopVoiceover: 1
-  waitForVO: 0
+  waitForVO: 1
   setSayDialog: {fileID: 0}
 --- !u!114 &104755823
 MonoBehaviour:
@@ -218,14 +218,14 @@ MonoBehaviour:
   description: 
   character: {fileID: 2112413281}
   portrait: {fileID: 21300000, guid: a7ddf97c30db44d2581c9d2b9ec8d39d, type: 3}
-  voiceOverClip: {fileID: 0}
+  voiceOverClip: {fileID: 8300000, guid: b7e20c156d72cb341a63b0dad68c6ca6, type: 3}
   showAlways: 1
   showCount: 1
   extendPrevious: 0
   fadeWhenDone: 1
   waitForClick: 1
   stopVoiceover: 1
-  waitForVO: 0
+  waitForVO: 1
   setSayDialog: {fileID: 0}
 --- !u!114 &104755824
 MonoBehaviour:
@@ -245,14 +245,14 @@ MonoBehaviour:
   description: 
   character: {fileID: 2112413281}
   portrait: {fileID: 21300000, guid: a7ddf97c30db44d2581c9d2b9ec8d39d, type: 3}
-  voiceOverClip: {fileID: 0}
+  voiceOverClip: {fileID: 8300000, guid: 0766bd2793999ec4aa1e2436ea2196b8, type: 3}
   showAlways: 1
   showCount: 1
   extendPrevious: 0
   fadeWhenDone: 1
   waitForClick: 1
   stopVoiceover: 1
-  waitForVO: 0
+  waitForVO: 1
   setSayDialog: {fileID: 0}
 --- !u!114 &104755825
 MonoBehaviour:
@@ -287,14 +287,14 @@ MonoBehaviour:
   description: 
   character: {fileID: 2112413281}
   portrait: {fileID: 21300000, guid: a7ddf97c30db44d2581c9d2b9ec8d39d, type: 3}
-  voiceOverClip: {fileID: 0}
+  voiceOverClip: {fileID: 8300000, guid: b86e45d094f5d0f4fb6f22eb290b2c7d, type: 3}
   showAlways: 1
   showCount: 1
   extendPrevious: 0
   fadeWhenDone: 1
   waitForClick: 1
   stopVoiceover: 1
-  waitForVO: 0
+  waitForVO: 1
   setSayDialog: {fileID: 0}
 --- !u!114 &104755827
 MonoBehaviour:
@@ -343,7 +343,7 @@ MonoBehaviour:
   scrollPos: {x: 238.6667, y: 32.66667}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
-  blockViewHeight: 400
+  blockViewHeight: 484
   zoom: 1
   scrollViewRect:
     serializedVersion: 2
@@ -354,7 +354,7 @@ MonoBehaviour:
   selectedBlocks:
   - {fileID: 104755827}
   selectedCommands:
-  - {fileID: 104755824}
+  - {fileID: 104755823}
   variables: []
   description: 
   stepPause: 0
@@ -455,7 +455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Fungus::Fungus.Block
   nodeRect:
     serializedVersion: 2
-    x: 272
+    x: 270.66663
     y: 97
     width: 111.13333
     height: 40
@@ -1530,6 +1530,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &2056326629 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4407083598895182024, guid: 1210d3c74b59335499e06d974585d1f0, type: 3}
+  m_PrefabInstance: {fileID: 2134054632}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2096364172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2997076700243788490, guid: 84bb97f2bef28f54a9963007a36107e4, type: 3}
@@ -1705,6 +1710,14 @@ PrefabInstance:
     - target: {fileID: 6569063231090815170, guid: 1210d3c74b59335499e06d974585d1f0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -74
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766615076462733124, guid: 1210d3c74b59335499e06d974585d1f0, type: 3}
+      propertyPath: targetAudioSource
+      value: 
+      objectReference: {fileID: 2056326629}
+    - target: {fileID: 7766615076462733124, guid: 1210d3c74b59335499e06d974585d1f0, type: 3}
+      propertyPath: useLegacyAudioLogic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8343927147780288728, guid: 1210d3c74b59335499e06d974585d1f0, type: 3}
       propertyPath: m_AnchorMax.y

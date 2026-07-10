@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using Fungus;
+using NUnit.Framework.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,10 +24,10 @@ namespace Core
         private float _autoTimer;
         private Writer _writer;
         private DialogInput _dialogInput;
-        private bool _hasSkippedTyping;
+   
         private void OnEnable()
         {
-            BlockSignals.OnBlockEnd += _ => _currentMode = DialgoueMode.Manual;
+            BlockSignals.OnBlockEnd += ResetMode;
             _autoButton.onClick.AddListener(() =>
             {
                 SetMode(DialgoueMode.Auto);
@@ -42,6 +43,7 @@ namespace Core
         {
             _autoButton.onClick.RemoveAllListeners();
             _fastButton.onClick.RemoveAllListeners();
+            BlockSignals.OnBlockEnd -= ResetMode;
         }
 
         private void Update()
@@ -68,7 +70,6 @@ namespace Core
                     if (isCurrentlyTyping)
                     {
                         _dialogInput.SetNextLineFlag();
-                        _hasSkippedTyping = true;
                     }
                     
                     if (_writer.IsWaitingForInput)
@@ -77,7 +78,6 @@ namespace Core
                         if (_autoTimer >= .5f)
                         {
                             _dialogInput.SetNextLineFlag();
-                            _hasSkippedTyping = false;
                             _autoTimer = 0;
                         }
                     }
@@ -106,6 +106,11 @@ namespace Core
             {
                 _dialogInput = SayDialog.ActiveSayDialog.GetComponent<DialogInput>();
             }
+        }
+        
+        private void ResetMode(Block block)
+        {
+            _currentMode = DialgoueMode.Manual;
         }
     }
 }

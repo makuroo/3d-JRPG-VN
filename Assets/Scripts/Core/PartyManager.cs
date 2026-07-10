@@ -31,6 +31,9 @@ namespace Core
 
       public void InitializePartyData(CharacterDataSo pickedUnit)
       {
+         _pickedUnits.Clear();
+         EnemyPartyData.Clear();
+         PlayerPartyData.Clear();
          PlayerPartyData = GetParty(pickedUnit);
          EnemyPartyData = GetParty();
       }

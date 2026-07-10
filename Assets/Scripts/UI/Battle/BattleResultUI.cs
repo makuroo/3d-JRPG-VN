@@ -16,8 +16,7 @@ namespace UI.Battle
       {
          _continueButton.onClick.AddListener(() =>
          {
-            BattleManager.Instance.ReturnToOverworld();
-            AudioManager.Instance.PlaySfx("ButtonClick",transform.position);
+            GameManager.Instance.StartCoroutine(GameManager.Instance.ScreenTransition("Menu"));
          });
       }
 
